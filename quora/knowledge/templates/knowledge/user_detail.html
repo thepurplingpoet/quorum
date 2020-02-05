@@ -1,11 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  {% comment %} <h1>Title: {{ book.title }}</h1>
+  <h1>Name: {{ user.name }}</h1>
 
-  <p><strong>Author:</strong> <a href="">{{ book.author }}</a></p> <!-- author detail link not yet defined -->
-  <p><strong>Summary:</strong> {{ book.summary }}</p>
-  <p><strong>ISBN:</strong> {{ book.isbn }}</p> 
+  <p><strong>Username:</strong> <a href="">{{ user.username }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Bio:</strong> {{ user.bio }}</p>
+  {% comment %} <p><strong>ISBN:</strong> {{ book.isbn }}</p> 
   <p><strong>Language:</strong> {{ book.language }}</p>  
   <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>  
 
@@ -23,5 +23,5 @@
       <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
       <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
     {% endfor %}
-  </div> {% endcomment %}
+  </div>  {% endcomment %}
 {% endblock %}

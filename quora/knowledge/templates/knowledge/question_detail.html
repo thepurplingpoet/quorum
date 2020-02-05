@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Title: {{ question.question_text }}</h1>
 
-  <p><strong>Author:</strong> <a href="">{{ question.user.username }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Author:</strong> <a href="{% url 'user-detail' question.user.pk %}">{{ question.user.username }}</a></p> <!-- author detail link not yet defined -->
   <p><strong>Date added:</strong> {{ question.pub_date }}</p>  
 
   {% comment %} <div style="margin-left:20px;margin-top:20px">
