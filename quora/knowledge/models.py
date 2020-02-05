@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse
 # Create your models here.
 
 class User(models.Model):
@@ -14,7 +14,7 @@ class User(models.Model):
         ordering = ['name']
 
     def get_absolute_url(self):
-        return reverse('user-detail-view', args=[str(self.id)]) 
+        return reverse('user-detail', args=[str(self.id)]) 
 
 
 class Question(models.Model):
@@ -29,7 +29,7 @@ class Question(models.Model):
         ordering = ['-pub_date']
 
     def get_absolute_url(self):
-        return reverse('question-detail-view', args=[str(self.id)]) 
+        return reverse('question-detail', args=[str(self.id)]) 
 
 
 class Answer(models.Model):
@@ -46,7 +46,7 @@ class Answer(models.Model):
         ordering = ['-pub_date']
 
     def get_absolute_url(self):
-        return reverse('answer-detail-view', args=[str(self.id)]) 
+        return reverse('answer-detail', args=[str(self.id)]) 
 
 
 class Comment(models.Model):
@@ -62,5 +62,5 @@ class Comment(models.Model):
         ordering = ['-pub_date']
 
     def get_absolute_url(self):
-        return reverse('comment-detail-view', args=[str(self.id)]) 
+        return reverse('comment-detail', args=[str(self.id)]) 
 

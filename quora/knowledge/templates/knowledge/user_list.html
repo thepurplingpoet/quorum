@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Questions</h1>
+  {% if user_list %}
+  <ul>
+    {% for user in user_list %}
+      <li>
+        <a href="{{ user.get_absolute_url }}">{{ user.name }}</a> ({{user.bio}})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no users yet.</p>
+  {% endif %}       
+{% endblock %}
