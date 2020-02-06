@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+import datetime
+# from .forms import CreateQuestion
 # Create your views here.
 
 from .models import User, Question, Answer, Comment
@@ -61,6 +63,7 @@ class UserDelete(DeleteView):
 class QuestionCreate(CreateView):
     model = Question
     fields = ['question_text']
+    initial = {'pub_date':'05/01/2018'}
     
 
 class QuestionUpdate(UpdateView):
@@ -82,3 +85,4 @@ class CommentUpdate(UpdateView):
 class CommentDelete(DeleteView):
     model=Comment
     success_url = reverse_lazy('question-detail')
+

@@ -1,14 +1,20 @@
-from django import forms
-from django import ModelForm 
-from knowledge.models import Answer, User, Question, Comment
+# from django import forms
+# from django.forms import ModelForm
+# from knowledge.models import Answer, User, Question, Comment
 
-class editAnswer(ModelForm):
-    class Meta:
-        mode=Answer
-        fields=['answer_text']
+# class editAnswer(ModelForm):
+#     class Meta:
+#         model=Answer
+#         fields=['answer_text']
 
 
-class editProfile(ModelForm):
-    class Meta:
-        mode=User
-        fields=['name','bio']
+# class editProfile(ModelForm):
+#     class Meta:
+#         model=User
+#         fields=['name','bio']
+
+# class CreateQuestion(ModelForm):
+#     class Meta:
+#         model=Question
+#         fields=['question_text']
+
