@@ -2,6 +2,7 @@
 
 {% block content %}
   <h1>Questions</h1>
+  <a href="{% url 'question_create' %}">Add Question</a>
   {% if question_list %}
   <ul>
     {% for question in question_list %}
