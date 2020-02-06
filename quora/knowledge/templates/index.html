@@ -4,9 +4,8 @@
   <h1>Djanquora Home</h1>
   <p>Welcome to Djanquora, a question-answer website developed in <em>Django</em>!</p>
   
-  <ul>
-    <li><strong>Questions:</strong> {{ num_questions }}</li>
-    <li><strong>Users:</strong> {{ num_users }}</li>
-    
+  <ul>{% for ques in questions%}
+    <li><strong><a href="{{ques.get_absolute_url}}">{{ques}}</a></strong></li>  
+    {% endfor %}  
   </ul>
 {% endblock %}

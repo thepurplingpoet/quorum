@@ -9,13 +9,11 @@ def index(request):
     """View function for home page of site."""
 
     # Generate counts of some of the main objects
-    num_users = User.objects.all().count()
-    num_questions = Question.objects.all().count()
+    latest_questions = Question.objects.all()[:5]
 
     
     context = {
-        'num_questions': num_questions,
-        'num_users': num_users
+        'questions':latest_questions
     }
 
     # Render the HTML template index.html with the data in the context variable
