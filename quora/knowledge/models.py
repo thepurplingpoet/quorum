@@ -19,7 +19,7 @@ class User(models.Model):
 
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=200)
+    question_text = models.CharField(max_length=200,verbose_name= 'Question')
     pub_date = models.DateTimeField('date published')
     upvotes = models.IntegerField(blank=True, null=True, default=0)
     downvotes = models.IntegerField(blank=True, null=True, default=0)  

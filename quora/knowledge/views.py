@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -63,9 +63,7 @@ class UserDelete(DeleteView):
 class QuestionCreate(CreateView):
     model = Question
     fields = ['question_text']
-    initial = {'pub_date':'05/01/2018','user_id':'gagan'}
-    
-
+    #initial = {'pub_date':'05/01/2018','user':User()}
 class QuestionUpdate(UpdateView):
     model = Question
     fields = '__all__'
