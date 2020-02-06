@@ -63,7 +63,7 @@ class UserDelete(DeleteView):
 class QuestionCreate(CreateView):
     model = Question
     fields = ['question_text']
-    initial = {'pub_date':'05/01/2018'}
+    initial = {'pub_date':'05/01/2018','user_id':'gagan'}
     
 
 class QuestionUpdate(UpdateView):
