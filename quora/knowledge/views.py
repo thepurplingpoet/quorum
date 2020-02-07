@@ -3,6 +3,8 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 import datetime
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # from .forms import CreateQuestion
 # Create your views here.
 
@@ -36,49 +38,49 @@ class UserDetail(generic.DetailView):
     model = User
 
 
-class AnswerCreate(CreateView):
+class AnswerCreate(LoginRequiredMixin, CreateView):
     model = Answer
     fields = '__all__'
     
 
-class AnswerUpdate(UpdateView):
+class AnswerUpdate(LoginRequiredMixin, UpdateView):
     model = Answer
     fields = '__all__'
 
-class AnswerDelete(DeleteView):
+class AnswerDelete(LoginRequiredMixin, DeleteView):
     model = Answer
     success_url = reverse_lazy('answers')
 
 
-class UserUpdate(UpdateView):
+class UserUpdate(LoginRequiredMixin, UpdateView):
     model=User
     fields=['firstname', 'lastname', 'bio']
 
-class UserDelete(DeleteView):
+class UserDelete(LoginRequiredMixin, DeleteView):
     model=User
     success_url = reverse_lazy('index')
 
-class QuestionCreate(CreateView):
+class QuestionCreate(LoginRequiredMixin, CreateView):
     model = Question
     fields = ['question_text']
     #initial = {'pub_date':'05/01/2018','user':User()}
-class QuestionUpdate(UpdateView):
+class QuestionUpdate(LoginRequiredMixin, UpdateView):
     model = Question
     fields = '__all__'
 
-class QuestionDelete(DeleteView):
+class QuestionDelete(LoginRequiredMixin, DeleteView):
     model = Question
     success_url = reverse_lazy('questions')
 
-class CommentCreate(CreateView):
+class CommentCreate(LoginRequiredMixin, CreateView):
     model=Comment
     fields='__all__'
 
-class CommentUpdate(UpdateView):
+class CommentUpdate(LoginRequiredMixin, UpdateView):
     model=Comment
     fields=['comment_text']
 
-class CommentDelete(DeleteView):
+class CommentDelete(LoginRequiredMixin, DeleteView):
     model=Comment
     success_url = reverse_lazy('question-detail')
 
