@@ -1,22 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from users.models import User
-# Create your models here.
-
-# class User(models.Model):
-#     name = models.CharField(max_length=100)
-#     username = models.CharField(max_length=12)
-#     bio = models.CharField(max_length=50)
-
-#     def __str__(self):
-#         return self.name
-    
-#     class Meta: 
-#         ordering = ['name']
-
-#     def get_absolute_url(self):
-#         return reverse('user-detail', args=[str(self.id)]) 
-
 
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

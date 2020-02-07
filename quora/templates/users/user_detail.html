@@ -1,9 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Name: {{ user.name }}</h1>
+  <h1>Name: {{ user.firstname }}</h1>
 
   <p><strong>Username:</strong> {{ user.username }}</p>
+  <p><strong>First Name:</strong> {{ user.firstname }}</p>
+  <p><strong>Last Name:</strong> {{ user.lastname }}</p>
   <p><strong>Bio:</strong> {{ user.bio }}</p>
   
   <div style="margin-left:20px;margin-top:20px">

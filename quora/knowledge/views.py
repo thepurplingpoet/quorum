@@ -6,7 +6,8 @@ import datetime
 # from .forms import CreateQuestion
 # Create your views here.
 
-from .models import User, Question, Answer, Comment
+from .models import Question, Answer, Comment
+from users.models import User
 
 def index(request):
     """View function for home page of site."""
@@ -48,13 +49,10 @@ class AnswerDelete(DeleteView):
     model = Answer
     success_url = reverse_lazy('answers')
 
-class UserCreate(CreateView):
-    model=User
-    fields='__all__'
 
 class UserUpdate(UpdateView):
     model=User
-    fields=['name', 'bio']
+    fields=['firstname', 'lastname', 'bio']
 
 class UserDelete(DeleteView):
     model=User
