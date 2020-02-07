@@ -35,14 +35,26 @@ class QuestionDetail(generic.DetailView):
     model = Question
 
 
+class AnswerDetail(generic.DetailView):
+    model = Answer
+
 class UserDetail(generic.DetailView):
     model = User
 
 
 class AnswerCreate(LoginRequiredMixin, CreateView):
     model = Answer
-    fields = '__all__'
-    
+    fields = ['answer_text']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        question_id = self.kwargs['question']
+        self.object.question = Question(question_id)
+        self.object.user = self.request.user
+        self.object.pub_date = timezone.now()
+        self.object.save()
+        self.get_success_url = reverse_lazy('question-detail', args=[str(question_id)])
+        return HttpResponseRedirect(self.get_success_url)
 
 class AnswerUpdate(LoginRequiredMixin, UpdateView):
     model = Answer
@@ -72,27 +84,9 @@ class QuestionCreate(LoginRequiredMixin, CreateView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-    def get_initial(self, *args, **kwargs):
-        initial = super().get_initial(**kwargs)
-        print(initial)
-        initial['pub_date'] = timezone.now()
-        print(initial)
-
-        return initial
-
-    # def get_form_kwargs(self, *args, **kwargs):
-    #     kwargs = super(QuestionCreate, self).get_form_kwargs(*args, **kwargs)
-    #     kwargs['user'] = self.request.user
-    #     return kwargs
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['pub_date'] = timezone.now()
-    #     context['user'] = self.request.user
-    #     return context
 class QuestionUpdate(LoginRequiredMixin, UpdateView):
     model = Question
-    fields = '__all__'
+    fields = ['question_text']
 
 class QuestionDelete(LoginRequiredMixin, DeleteView):
     model = Question

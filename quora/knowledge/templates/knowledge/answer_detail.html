@@ -1,12 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Question: {{ question.question_text }}</h1>
+  <h1>Answer: {{ answer.answer_text }}</h1>
 
-  <p><strong>Author:</strong> <a href="{% url 'user-detail' question.user.pk %}">{{ question.user.username }}</a></p>
-  <p><strong>Date added:</strong> {{ question.pub_date }}</p>  
+  <p><strong>Author:</strong> <a href="{% url 'user-detail' answer.user.pk %}">{{ answer.user.username }}</a></p>
+  <p><strong>Date added:</strong> {{ answer.pub_date }}</p>  
 
-  <p><a href="{% url 'question_update' question.pk %}">Update Question</a>
+  {% comment %} <p><a href="{% url 'question_update' question.pk %}">Update Question</a>
     <a href="{% url 'question_delete' question.pk %}">Delete Question</a>
   </p>
   <p><a href="{% url 'answer_create' question.pk %}">Add Answer</a></p>
@@ -25,5 +25,5 @@
       </p>
       
     {% endfor %} 
-  </div>
+  </div> {% endcomment %}
 {% endblock %}
