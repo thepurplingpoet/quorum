@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-import datetime
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 
 # from .forms import CreateQuestion
 # Create your views here.
@@ -63,7 +64,32 @@ class UserDelete(LoginRequiredMixin, DeleteView):
 class QuestionCreate(LoginRequiredMixin, CreateView):
     model = Question
     fields = ['question_text']
-    #initial = {'pub_date':'05/01/2018','user':User()}
+    
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.pub_date = timezone.now()
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_initial(self, *args, **kwargs):
+        initial = super().get_initial(**kwargs)
+        print(initial)
+        initial['pub_date'] = timezone.now()
+        print(initial)
+
+        return initial
+
+    # def get_form_kwargs(self, *args, **kwargs):
+    #     kwargs = super(QuestionCreate, self).get_form_kwargs(*args, **kwargs)
+    #     kwargs['user'] = self.request.user
+    #     return kwargs
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['pub_date'] = timezone.now()
+    #     context['user'] = self.request.user
+    #     return context
 class QuestionUpdate(LoginRequiredMixin, UpdateView):
     model = Question
     fields = '__all__'

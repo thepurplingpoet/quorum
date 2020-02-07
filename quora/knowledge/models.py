@@ -5,7 +5,7 @@ from users.models import User
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=200,verbose_name= 'Question')
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateField(verbose_name='date published')
     upvotes = models.IntegerField(blank=True, null=True, default=0)
     downvotes = models.IntegerField(blank=True, null=True, default=0)  
     def __str__(self):
@@ -24,7 +24,7 @@ class Answer(models.Model):
     answer_text = models.TextField()
     upvotes = models.IntegerField(blank=True, null=True, default=0)
     downvotes = models.IntegerField(blank=True, null=True, default=0)    
-    pub_date = models.DateTimeField('date added')
+    pub_date = models.DateField('date added')
 
     def __str__(self):
         return f'Answer by {self.user.username} to {self.question.question_text[:20]} ...'
@@ -40,7 +40,7 @@ class Comment(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment_text = models.TextField()
-    pub_date = models.DateTimeField('date added')
+    pub_date = models.DateField('date added')
     upvotes = models.IntegerField(blank=True, null=True, default=0)
     downvotes = models.IntegerField(blank=True, null=True, default=0)  
     def __str__(self):
