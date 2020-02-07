@@ -14,9 +14,9 @@
 
     {% for ans in question.answer_set.all %}
       <hr>
-        <p>{{ans.user.username}}, {{ans.user.bio}}</p>
+        <p><a href="{% url 'user-detail' ans.user.pk%}">{{ans.user.username}}</a>, {{ans.user.bio}}</p>
       <p>
-        {{ ans.answer_text }}
+        <a href="{% url 'answer-detail' ans.question.pk ans.pk %}">{{ ans.answer_text }}</a>
         <p>Comments!!</p>
         {% for cmt in ans.comment_set.all %}
         <p>{{cmt.user.username}}</p>

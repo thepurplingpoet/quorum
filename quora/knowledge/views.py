@@ -58,12 +58,13 @@ class AnswerCreate(LoginRequiredMixin, CreateView):
 
 class AnswerUpdate(LoginRequiredMixin, UpdateView):
     model = Answer
-    fields = '__all__'
+    fields = ['answer_text']
 
 class AnswerDelete(LoginRequiredMixin, DeleteView):
     model = Answer
-    success_url = reverse_lazy('answers')
-
+    def get_success_url(self):
+        question_id = self.kwargs['question']
+        return reverse_lazy('question-detail', args=[str(question_id)])
 
 class UserUpdate(LoginRequiredMixin, UpdateView):
     model=User
@@ -94,8 +95,18 @@ class QuestionDelete(LoginRequiredMixin, DeleteView):
 
 class CommentCreate(LoginRequiredMixin, CreateView):
     model=Comment
-    fields='__all__'
+    fields=['comment_text']
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        question_id = self.kwargs['question']
+        answer_id = self.kwargs['answer']
+        self.object.answer = Answer(answer_id)
+        self.object.user = self.request.user
+        self.object.pub_date = timezone.now()
+        self.object.save()
+        self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), str(answer_id)])
+        return HttpResponseRedirect(self.get_success_url)
 class CommentUpdate(LoginRequiredMixin, UpdateView):
     model=Comment
     fields=['comment_text']

@@ -10,5 +10,7 @@
   {% csrf_token %}
   <input type="submit" value="Yes, delete.">
 </form>
-
+<form action="{% url 'answer-detail' answer.question.pk answer.pk %}">
+    <input type="submit" value="No, Go Back" />
+</form>
 {% endblock %}

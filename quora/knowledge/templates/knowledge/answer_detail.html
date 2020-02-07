@@ -1,29 +1,30 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Answer: {{ answer.answer_text }}</h1>
+  <h1>Answer to: {{ answer.question.question_text }}</h1>
 
   <p><strong>Author:</strong> <a href="{% url 'user-detail' answer.user.pk %}">{{ answer.user.username }}</a></p>
   <p><strong>Date added:</strong> {{ answer.pub_date }}</p>  
 
-  {% comment %} <p><a href="{% url 'question_update' question.pk %}">Update Question</a>
-    <a href="{% url 'question_delete' question.pk %}">Delete Question</a>
+  <p><a href="{% url 'answer_update' answer.question.pk answer.pk %}">Update Answer</a>
+    <a href="{% url 'answer_delete' answer.question.pk answer.pk %}">Delete Answer</a>
   </p>
-  <p><a href="{% url 'answer_create' question.pk %}">Add Answer</a></p>
+  <p><a href="{% url 'comment_create' answer.question.pk answer.pk %}">Add Comment</a></p>
    <div style="margin-left:20px;margin-top:20px">
 
-    {% for ans in question.answer_set.all %}
+    
       <hr>
-        <p>{{ans.user.username}}, {{ans.user.bio}}</p>
+       
       <p>
-        {{ ans.answer_text }}
+      Answer:
+        {{ answer.answer_text }}
+        <hr>
         <p>Comments!!</p>
-        {% for cmt in ans.comment_set.all %}
-        <p>{{cmt.user.username}}</p>
-        <p>{{ cmt.comment_text}}</p>
+        {% for cmt in answer.comment_set.all %}
+        <p>{{cmt.user.username}} : 
+        {{ cmt.comment_text}}</p>
         {% endfor %}
       </p>
       
-    {% endfor %} 
-  </div> {% endcomment %}
+  </div>
 {% endblock %}
