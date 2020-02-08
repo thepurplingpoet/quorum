@@ -15,9 +15,10 @@
     <a href="{% url 'answer_delete' answer.question.pk answer.pk %}">Delete Answer</a>
   </p>
     {% endif %}
-
+{% if user.is_authenticated %}
   <p><a href="{% url 'comment_create' answer.question.pk answer.pk %}">Add Comment</a></p>
    <div style="margin-left:20px;margin-top:20px">
+    {% endif %}
 
     
       <hr>

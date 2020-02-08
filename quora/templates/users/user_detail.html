@@ -9,7 +9,10 @@
   <p><strong>Bio:</strong> {{ user.bio }}</p>
   
   <div style="margin-left:20px;margin-top:20px">
+    {% if question.user.pk == user.id %}
+
     <a href="{% url 'user_update' user.pk %}"> Edit bio</a>
+  {% endif %}
 
     {% for ques in user.question_set.all %}
       <hr>

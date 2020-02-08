@@ -16,7 +16,11 @@
     <a href="{% url 'question_delete' question.pk %}">Delete Question</a>
   </p>
   {% endif %}
+  {% if user.is_authenticated %}
+
   <p><a href="{% url 'answer_create' question.pk %}">Add Answer</a></p>
+    {% endif %}
+
    <div style="margin-left:20px;margin-top:20px">
 
     {% for ans in question.answer_set.all %}
