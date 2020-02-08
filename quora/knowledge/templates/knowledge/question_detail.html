@@ -20,7 +20,14 @@
 
   <p><a href="{% url 'answer_create' question.pk %}">Add Answer</a></p>
     {% endif %}
-
+    Upvotes: {{ question.upvotes }}
+ <form method="post" action="{% url 'question_vote' question.id %}">
+                        {% csrf_token %}
+                          
+                          <input type="submit" class="btn" name="upvote">
+                                
+                          
+                    </form>
    <div style="margin-left:20px;margin-top:20px">
 
     {% for ans in question.answer_set.all %}

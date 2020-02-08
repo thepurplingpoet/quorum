@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -144,3 +144,14 @@ class CommentDelete(LoginRequiredMixin, DeleteView):
     model=Comment
     success_url = reverse_lazy('question-detail')
 
+def question_vote(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+
+    if request.method == 'POST':
+        upvote = True if "upvote" in request.POST else False
+        user = request.user
+        question.upvotes+=1
+        question.save()
+
+        
+    return redirect('index')

@@ -7,6 +7,7 @@ urlpatterns = [
     path('question/<int:pk>', views.QuestionDetail.as_view(), name='question-detail'),
     path('user/<int:pk>', views.UserDetail.as_view(), name='user-detail'),
     path('question/<int:question>/answer/<int:pk>', views.AnswerDetail.as_view(), name = 'answer-detail'),
+    path('question/<int:pk>/', views.question_vote, name='question_vote'),
 
 ]
 
