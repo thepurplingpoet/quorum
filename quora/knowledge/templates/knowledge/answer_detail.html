@@ -4,11 +4,18 @@
   <h1>Answer to: {{ answer.question.question_text }}</h1>
 
   <p><strong>Author:</strong> <a href="{% url 'user-detail' answer.user.pk %}">{{ answer.user.username }}</a></p>
-  <p><strong>Date added:</strong> {{ answer.pub_date }}</p>  
+  <p><strong>Date added:</strong> {{ answer.pub_date }}
+  {% if answer.updated %}
+    <strong>updated on :</strong> {{ answer.updated }}
 
+  {% endif %}
+  </p>  
+  {% if answer.user.pk == user.id %}
   <p><a href="{% url 'answer_update' answer.question.pk answer.pk %}">Update Answer</a>
     <a href="{% url 'answer_delete' answer.question.pk answer.pk %}">Delete Answer</a>
   </p>
+    {% endif %}
+
   <p><a href="{% url 'comment_create' answer.question.pk answer.pk %}">Add Comment</a></p>
    <div style="margin-left:20px;margin-top:20px">
 

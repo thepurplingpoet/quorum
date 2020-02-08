@@ -60,6 +60,16 @@ class AnswerUpdate(LoginRequiredMixin, UpdateView):
     model = Answer
     fields = ['answer_text']
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        question_id = self.kwargs['question']
+        self.object.question = Question(question_id)
+        self.object.user = self.request.user
+        self.object.updated = timezone.now()
+        self.object.save()
+        self.get_success_url = reverse_lazy('question-detail', args=[str(question_id)])
+        return HttpResponseRedirect(self.get_success_url)
+
 class AnswerDelete(LoginRequiredMixin, DeleteView):
     model = Answer
     def get_success_url(self):
@@ -89,6 +99,13 @@ class QuestionUpdate(LoginRequiredMixin, UpdateView):
     model = Question
     fields = ['question_text']
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.updated = timezone.now()
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
 class QuestionDelete(LoginRequiredMixin, DeleteView):
     model = Question
     success_url = reverse_lazy('questions')
@@ -107,9 +124,21 @@ class CommentCreate(LoginRequiredMixin, CreateView):
         self.object.save()
         self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), str(answer_id)])
         return HttpResponseRedirect(self.get_success_url)
+        
 class CommentUpdate(LoginRequiredMixin, UpdateView):
     model=Comment
     fields=['comment_text']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        question_id = self.kwargs['question']
+        answer_id = self.kwargs['answer']
+        self.object.answer = Answer(answer_id)
+        self.object.user = self.request.user
+        self.object.updated = timezone.now()
+        self.object.save()
+        self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), str(answer_id)])
+        return HttpResponseRedirect(self.get_success_url)
 
 class CommentDelete(LoginRequiredMixin, DeleteView):
     model=Comment
