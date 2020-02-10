@@ -67,12 +67,13 @@
     {% for ans in question.answer_set.all %}
       <hr>
         <p><a href="{% url 'user-detail' ans.user.pk%}">{{ans.user.username}}</a>, {{ans.user.bio}}</p>
+        <p>Answered on {{ans.pub_date}} {% if ans.updated%}(updated {{ ans.updated}} ){% endif %}</p>
       <p>
         {{ ans.get_answer_short }}...<a href="{% url 'answer-detail' ans.question.pk ans.pk %}">Read More</a> </p>
        
         {% for cmt in ans.comment_set.all %}
         <div style="margin-left:10px;margin-top:20px"> 
-        <p>{{cmt.user.username}}: 
+        <p>{{cmt.user.username}} commented on {{cmt.pub_date}} {% if cmt.updated%}(updated {{ cmt.updated}} ){% endif %}: 
         {{ cmt.comment_text}}</p>
         </div>
         {% endfor %}

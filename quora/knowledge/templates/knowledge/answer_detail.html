@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Answer to: {{ answer.question.question_text }}</h1>
+  <h1>Answer to: <a href="{% url 'question-detail' answer.question.pk %}">{{ answer.question.question_text }}</a></h1>
 
   <p><strong>Author:</strong> <a href="{% url 'user-detail' answer.user.pk %}">{{ answer.user.username }}</a></p>
   <p><strong>Date added:</strong> {{ answer.pub_date }}
