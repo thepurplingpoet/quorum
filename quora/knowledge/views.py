@@ -67,7 +67,7 @@ class AnswerUpdate(LoginRequiredMixin, UpdateView):
         self.object.user = self.request.user
         self.object.updated = timezone.now()
         self.object.save()
-        self.get_success_url = reverse_lazy('question-detail', args=[str(question_id)])
+        self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), self.object.pk])
         return HttpResponseRedirect(self.get_success_url)
 
 class AnswerDelete(LoginRequiredMixin, DeleteView):
@@ -168,3 +168,53 @@ def question_vote(request, pk):
 
         
     return redirect('question-detail', pk)
+
+def answer_vote(request, question, pk):
+    answer = get_object_or_404(Answer, pk=pk)
+
+    if request.method == 'POST':
+        user = request.user
+        if "upvote" in request.POST:
+            answer.upvotes+=1
+            answer.upvote_users.add(user)
+            answer.save()
+        elif "downvote" in request.POST:
+            answer.downvotes+=1
+            answer.downvote_users.add(user)
+            answer.save()
+        elif "remove_upvote" in request.POST:
+            answer.upvotes-=1
+            answer.upvote_users.remove(user)
+            answer.save()
+        elif "remove_downvote" in request.POST:
+            answer.downvotes-=1
+            answer.downvote_users.remove(user)
+            answer.save()
+
+        
+    return redirect('answer-detail', question , pk)
+
+def comment_vote(request, question, answer, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    if request.method == 'POST':
+        user = request.user
+        if "upvote" in request.POST:
+            comment.upvotes+=1
+            comment.upvote_users.add(user)
+            comment.save()
+        elif "downvote" in request.POST:
+            comment.downvotes+=1
+            comment.downvote_users.add(user)
+            comment.save()
+        elif "remove_upvote" in request.POST:
+            comment.upvotes-=1
+            comment.upvote_users.remove(user)
+            comment.save()
+        elif "remove_downvote" in request.POST:
+            comment.downvotes-=1
+            comment.downvote_users.remove(user)
+            comment.save()
+
+        
+    return redirect('answer-detail', question , answer)

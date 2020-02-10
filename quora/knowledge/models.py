@@ -20,6 +20,7 @@ class Question(models.Model):
 
     def get_absolute_url(self):
         return reverse('question-detail', args=[str(self.id)]) 
+    
 
 
 class Answer(models.Model):
@@ -42,6 +43,8 @@ class Answer(models.Model):
     def get_absolute_url(self):
         return reverse('answer-detail', args=[str(self.id)]) 
 
+    def get_answer_short(self):
+        return self.answer_text[:50]
 
 class Comment(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
