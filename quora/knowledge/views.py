@@ -138,6 +138,13 @@ class CommentCreate(LoginRequiredMixin, CreateView):
         self.object.save()
         self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), str(answer_id)])
         return HttpResponseRedirect(self.get_success_url)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        answer_id = self.kwargs['answer']
+        answer = Answer.objects.get(pk=answer_id)
+        context['answer'] = answer.answer_text[:50]
+        return context
         
 class CommentUpdate(LoginRequiredMixin, UpdateView):
     model=Comment
@@ -153,6 +160,12 @@ class CommentUpdate(LoginRequiredMixin, UpdateView):
         self.object.save()
         self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), str(answer_id)])
         return HttpResponseRedirect(self.get_success_url)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        answer_id = self.kwargs['answer']
+        answer = Answer.objects.get(pk=answer_id)
+        context['answer'] = answer.answer_text[:50]
+        return context
 
 class CommentDelete(LoginRequiredMixin, DeleteView):
     model=Comment
