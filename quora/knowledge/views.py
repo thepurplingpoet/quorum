@@ -142,7 +142,10 @@ class CommentUpdate(LoginRequiredMixin, UpdateView):
 
 class CommentDelete(LoginRequiredMixin, DeleteView):
     model=Comment
-    success_url = reverse_lazy('question-detail')
+    def get_success_url(self):
+        question_id = self.kwargs['question']
+        answer_id = self.kwargs['answer']
+        return reverse_lazy('answer-detail', args=[str(question_id), str(answer_id)])
 
 def question_vote(request, pk):
     question = get_object_or_404(Question, pk=pk)

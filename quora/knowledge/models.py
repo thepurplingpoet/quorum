@@ -58,11 +58,9 @@ class Comment(models.Model):
     downvote_users = models.ManyToManyField(User, related_name='Users_who_downvoted_this_comment')
     
     def __str__(self):
-        return f'Comment by {self.user.name} on {self.user.username}\'s answer to {self.answer.question.question_text[:20]} ...'
+        return f'Comment by {self.user.username} on {self.user.username}\'s answer to {self.answer.question.question_text[:20]} ...'
 
     class Meta: 
         ordering = ['-pub_date']
 
-    def get_absolute_url(self):
-        return reverse('comment-detail', args=[str(self.id)]) 
 
