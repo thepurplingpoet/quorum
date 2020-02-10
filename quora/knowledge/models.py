@@ -26,7 +26,7 @@ class Question(models.Model):
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    answer_text = models.TextField()
+    answer_text = models.TextField(verbose_name="")
     upvotes = models.IntegerField(blank=True, null=True, default=0)
     downvotes = models.IntegerField(blank=True, null=True, default=0)    
     pub_date = models.DateField('date added')
@@ -38,7 +38,7 @@ class Answer(models.Model):
         return f'Answer by {self.user.username} to {self.question.question_text[:20]} ...'
 
     class Meta: 
-        ordering = ['-pub_date']
+        ordering = ['-pub_date', 'answer_text']
 
     def get_absolute_url(self):
         return reverse('answer-detail', args=[str(self.id)]) 

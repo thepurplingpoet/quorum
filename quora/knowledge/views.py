@@ -45,16 +45,24 @@ class UserDetail(generic.DetailView):
 class AnswerCreate(LoginRequiredMixin, CreateView):
     model = Answer
     fields = ['answer_text']
-
+    
     def form_valid(self, form):
         self.object = form.save(commit=False)
         question_id = self.kwargs['question']
-        self.object.question = Question(question_id)
+        question = Question.objects.get(pk=question_id)
+        self.object.question = question
         self.object.user = self.request.user
         self.object.pub_date = timezone.now()
         self.object.save()
         self.get_success_url = reverse_lazy('question-detail', args=[str(question_id)])
         return HttpResponseRedirect(self.get_success_url)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question_id = self.kwargs['question']
+        question = Question.objects.get(pk=question_id)
+        context['question'] = question.question_text
+        return context
 
 class AnswerUpdate(LoginRequiredMixin, UpdateView):
     model = Answer
@@ -63,12 +71,18 @@ class AnswerUpdate(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         question_id = self.kwargs['question']
-        self.object.question = Question(question_id)
+        self.object.question = Question.objects.get(pk=question_id)
         self.object.user = self.request.user
         self.object.updated = timezone.now()
         self.object.save()
         self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), self.object.pk])
         return HttpResponseRedirect(self.get_success_url)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question_id = self.kwargs['question']
+        question = Question.objects.get(pk=question_id)
+        context['question'] = question.question_text
+        return context
 
 class AnswerDelete(LoginRequiredMixin, DeleteView):
     model = Answer

@@ -10,6 +10,9 @@
 
   {% endif %}
   </p>  
+  <strong>  Answer </strong>
+   <p> {{ answer.answer_text }}</p>
+
   {% if answer.user.pk == user.id %}
   <p><a href="{% url 'answer_update' answer.question.pk answer.pk %}">Update Answer</a>
     <a href="{% url 'answer_delete' answer.question.pk answer.pk %}">Delete Answer</a>
@@ -17,12 +20,15 @@
     {% endif %}
 {% if user.is_authenticated %}
   <p><a href="{% url 'comment_create' answer.question.pk answer.pk %}">Add Comment</a></p>
-   <div style="margin-left:20px;margin-top:20px">
+   
     {% endif %}
-
+  Upvotes: {{ answer.upvotes }}
+  Downvotes: {{ answer.downvotes }}
+  <div style="margin-left:20px;margin-top:20px">
 {% if user.is_authenticated and answer.user.pk != user.id %}
     
-    Upvotes: {{ answer.upvotes }}
+   
+ <p><span class="form-group row">
  <form method="post" action="{% url 'answer_vote' answer.question.id answer.id %}">
                         {% csrf_token %}
                           
@@ -37,11 +43,9 @@
       {% endif %}
       {% if user in answer.downvote_users.all %} disabled
       {% endif %}>
-                                
-                          
-                    </form>
+     </form>
                     
-    Downvotes: {{ answer.downvotes }}
+    
  <form method="post" action="{% url 'answer_vote' answer.question.id answer.id %}">
                         {% csrf_token %}
                           
@@ -57,16 +61,21 @@
       {% if user in answer.upvote_users.all %} disabled
       {% endif %}>
      </form>
+     </span>
+      </p>
       
-       {% endif %}  
+      {% endif %}  
     
       <hr>
        
-      <p>
-      Answer:
-        {{ answer.answer_text }}
+      
+     
+       
         <hr>
+        {% if not answer.comment_set.all%} No comments yet for this answer!! 
+        {% else %}
         <p><strong>Comments!!</strong></p>
+        {% endif %}
         {% for cmt in answer.comment_set.all %}
         <p>{{cmt.user.username}} : 
         {{ cmt.comment_text}}</p>
@@ -78,6 +87,8 @@
         {% if user.is_authenticated and cmt.user.pk != user.id %}
     
     Upvotes: {{ cmt.upvotes }}
+    Downvotes: {{ cmt.downvotes }}
+    <p>
  <form method="post" action="{% url 'comment_vote' answer.question.id answer.id cmt.id %}">
                         {% csrf_token %}
                           
@@ -94,7 +105,7 @@
       {% endif %}>
        </form>
                     
-    Downvotes: {{ cmt.downvotes }}
+    
  <form method="post" action="{% url 'comment_vote' answer.question.id answer.id cmt.id %}">
                         {% csrf_token %}
                           
@@ -110,7 +121,7 @@
       {% if user in cmt.upvote_users.all %} disabled
       {% endif %}>
      </form>
-      
+      </p>
        {% endif %}  
     
       <hr>
