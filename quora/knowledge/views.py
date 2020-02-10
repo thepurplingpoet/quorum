@@ -148,10 +148,23 @@ def question_vote(request, pk):
     question = get_object_or_404(Question, pk=pk)
 
     if request.method == 'POST':
-        upvote = True if "upvote" in request.POST else False
         user = request.user
-        question.upvotes+=1
-        question.save()
+        if "upvote" in request.POST:
+            question.upvotes+=1
+            question.upvote_users.add(user)
+            question.save()
+        elif "downvote" in request.POST:
+            question.downvotes+=1
+            question.downvote_users.add(user)
+            question.save()
+        elif "remove_upvote" in request.POST:
+            question.upvotes-=1
+            question.upvote_users.remove(user)
+            question.save()
+        elif "remove_downvote" in request.POST:
+            question.downvotes-=1
+            question.downvote_users.remove(user)
+            question.save()
 
         
-    return redirect('index')
+    return redirect('question-detail', pk)

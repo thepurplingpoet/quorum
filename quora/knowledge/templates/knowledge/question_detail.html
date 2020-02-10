@@ -16,18 +16,49 @@
     <a href="{% url 'question_delete' question.pk %}">Delete Question</a>
   </p>
   {% endif %}
-  {% if user.is_authenticated %}
+  {% if user.is_authenticated and question.user.pk != user.id %}
 
   <p><a href="{% url 'answer_create' question.pk %}">Add Answer</a></p>
-    {% endif %}
+    
     Upvotes: {{ question.upvotes }}
  <form method="post" action="{% url 'question_vote' question.id %}">
                         {% csrf_token %}
                           
-                          <input type="submit" class="btn" name="upvote">
+      <input type="submit"
+      class="btn" 
+      {% if user in question.upvote_users.all%}
+      name="remove_upvote"
+      value="Remove Upvote"
+      {% else %}
+      name = "upvote"
+      value = "Upvote"
+      {% endif %}
+      {% if user in question.downvote_users.all %} disabled
+      {% endif %}>
                                 
                           
                     </form>
+                    
+    Downvotes: {{ question.downvotes }}
+ <form method="post" action="{% url 'question_vote' question.id %}">
+                        {% csrf_token %}
+                          
+      <input type="submit" 
+      class="btn" 
+      {% if user in question.downvote_users.all%}
+      name="remove_downvote"
+      value="Remove Downvote"
+      {% else %}
+      name = "downvote"
+      value = "Downvote"
+      {% endif %}
+      {% if user in question.upvote_users.all %} disabled
+      {% endif %}>
+                                
+                          
+                    </form>
+       {% endif %}  
+
    <div style="margin-left:20px;margin-top:20px">
 
     {% for ans in question.answer_set.all %}
