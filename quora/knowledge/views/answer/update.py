@@ -7,6 +7,7 @@ from knowledge.models.question import Question
 from users.models import User
 from django.http import HttpResponseRedirect
 
+
 class AnswerUpdate(LoginRequiredMixin, UpdateView):
     model = Answer
     fields = ['answer_text']
@@ -18,7 +19,8 @@ class AnswerUpdate(LoginRequiredMixin, UpdateView):
         self.object.user = self.request.user
         self.object.updated = timezone.now()
         self.object.save()
-        self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), self.object.pk])
+        self.get_success_url = reverse_lazy(
+            'answer-detail', args=[str(question_id), self.object.pk])
         return HttpResponseRedirect(self.get_success_url)
 
     def get_context_data(self, **kwargs):

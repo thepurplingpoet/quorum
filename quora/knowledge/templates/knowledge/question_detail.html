@@ -1,84 +1,69 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Question: {{ question.question_text }}</h1>
+<h1>Question: {{ question.question_text }}</h1>
 
-  <p><strong>Posted By:</strong> <a href="{% url 'user-detail' question.user.pk %}">{{ question.user.username }}</a>
+<p><strong>Posted By:</strong> <a href="{% url 'user-detail' question.user.pk %}">{{ question.user.username }}</a>
   <strong>On</strong> {{ question.pub_date }}
-    
+
   {% if question.updated %}
-    <strong>updated on :</strong> {{ question.updated }}
+  <strong>updated on :</strong> {{ question.updated }}
 
   {% endif %}
-  </p>
-  {% if question.user.pk == user.id %}
-  <p><a href="{% url 'question_update' question.pk %}">Update Question</a>
-    <a href="{% url 'question_delete' question.pk %}">Delete Question</a>
-  </p>
-  {% endif %}
-  Upvotes: {{ question.upvotes }}
-    Downvotes: {{ question.downvotes }}
-  {% if user.is_authenticated and question.user.pk != user.id %}
+</p>
+{% if question.user.pk == user.id %}
+<p><a href="{% url 'question_update' question.pk %}">Update Question</a>
+  <a href="{% url 'question_delete' question.pk %}">Delete Question</a>
+</p>
+{% endif %}
+Upvotes: {{ question.upvotes }}
+Downvotes: {{ question.downvotes }}
+{% if user.is_authenticated and question.user.pk != user.id %}
 
-  <p><a href="{% url 'answer_create' question.pk %}">Add Answer</a></p>
-    
-    
-    <p>
- <form method="post" action="{% url 'question_vote' question.id %}">
-                        {% csrf_token %}
-                          
-      <input type="submit"
-      class="btn" 
-      {% if user in question.upvote_users.all%}
-      name="remove_upvote"
-      value="Remove Upvote"
-      {% else %}
-      name = "upvote"
-      value = "Upvote"
-      {% endif %}
-      {% if user in question.downvote_users.all %} disabled
-      {% endif %}>
-                                
-                          
-                    </form>
-                    
-    
- <form method="post" action="{% url 'question_vote' question.id %}">
-                        {% csrf_token %}
-                          
-      <input type="submit" 
-      class="btn" 
-      {% if user in question.downvote_users.all%}
-      name="remove_downvote"
-      value="Remove Downvote"
-      {% else %}
-      name = "downvote"
-      value = "Downvote"
-      {% endif %}
-      {% if user in question.upvote_users.all %} disabled
-      {% endif %}>
-                                
-                          
-                    </form></p>
-       {% endif %}  
+<p><a href="{% url 'answer_create' question.pk %}">Add Answer</a></p>
 
-   <div style="margin-left:20px;margin-top:20px">
+
+<p>
+  <form method="post" action="{% url 'question_vote' question.id %}">
+    {% csrf_token %}
+
+    <input type="submit" class="btn" {% if user in question.upvote_users.all%} name="remove_upvote"
+      value="Remove Upvote" {% else %} name="upvote" value="Upvote" {% endif %}
+      {% if user in question.downvote_users.all %} disabled {% endif %}>
+
+
+  </form>
+
+
+  <form method="post" action="{% url 'question_vote' question.id %}">
+    {% csrf_token %}
+
+    <input type="submit" class="btn" {% if user in question.downvote_users.all%} name="remove_downvote"
+      value="Remove Downvote" {% else %} name="downvote" value="Downvote" {% endif %}
+      {% if user in question.upvote_users.all %} disabled {% endif %}>
+
+
+  </form>
+</p>
+{% endif %}
+
+<div style="margin-left:20px;margin-top:20px">
   {% if not question.answer_set.all%} No answers yet for this question :( {% endif %}
-    {% for ans in question.answer_set.all %}
-      <hr>
-        <p><a href="{% url 'user-detail' ans.user.pk%}">{{ans.user.username}}</a>, {{ans.user.bio}}</p>
-        <p>Answered on {{ans.pub_date}} {% if ans.updated%}(updated {{ ans.updated}} ){% endif %}</p>
-      <p>
-        {{ ans.get_answer_short }}...<a href="{% url 'answer-detail' ans.question.pk ans.pk %}">Read More</a> </p>
-       
-        {% for cmt in ans.comment_set.all %}
-        <div style="margin-left:10px;margin-top:20px"> 
-        <p>{{cmt.user.username}} commented on {{cmt.pub_date}} {% if cmt.updated%}(updated {{ cmt.updated}} ){% endif %}: 
-        {{ cmt.comment_text}}</p>
-        </div>
-        {% endfor %}
-      
-      
-    {% endfor %} 
+  {% for ans in question.answer_set.all %}
+  <hr>
+  <p><a href="{% url 'user-detail' ans.user.pk%}">{{ans.user.username}}</a>, {{ans.user.bio}}</p>
+  <p>Answered on {{ans.pub_date}} {% if ans.updated%}(updated {{ ans.updated}} ){% endif %}</p>
+  <p>
+    {{ ans.get_answer_short }}...<a href="{% url 'answer-detail' ans.question.pk ans.pk %}">Read More</a> </p>
+
+  {% for cmt in ans.comment_set.all %}
+  <div style="margin-left:10px;margin-top:20px">
+    <p>{{cmt.user.username}} commented on {{cmt.pub_date}} {% if cmt.updated%}(updated {{ cmt.updated}} ){% endif %}:
+      {{ cmt.comment_text}}</p>
   </div>
+  {% endfor %}
+
+
+  {% endfor %}
+</div>
 {% endblock %}

@@ -5,6 +5,7 @@ from knowledge.models.question import Question
 from users.models import User
 from django.http import HttpResponseRedirect
 
+
 class QuestionUpdate(LoginRequiredMixin, UpdateView):
     model = Question
     fields = ['question_text']

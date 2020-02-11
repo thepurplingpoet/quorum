@@ -3,8 +3,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from knowledge.models.comment import Comment
 
+
 class CommentDelete(LoginRequiredMixin, DeleteView):
-    model=Comment
+    model = Comment
+
     def get_success_url(self):
         question_id = self.kwargs['question']
         answer_id = self.kwargs['answer']

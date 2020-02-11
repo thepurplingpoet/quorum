@@ -6,10 +6,11 @@ from knowledge.models.answer import Answer
 from knowledge.models.question import Question
 from django.http import HttpResponseRedirect
 
+
 class AnswerCreate(LoginRequiredMixin, CreateView):
     model = Answer
     fields = ['answer_text']
-    
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         question_id = self.kwargs['question']
@@ -18,9 +19,10 @@ class AnswerCreate(LoginRequiredMixin, CreateView):
         self.object.user = self.request.user
         self.object.pub_date = timezone.now()
         self.object.save()
-        self.get_success_url = reverse_lazy('question-detail', args=[str(question_id)])
+        self.get_success_url = reverse_lazy(
+            'question-detail', args=[str(question_id)])
         return HttpResponseRedirect(self.get_success_url)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         question_id = self.kwargs['question']

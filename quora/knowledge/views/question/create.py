@@ -4,10 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from knowledge.models.question import Question
 from django.http import HttpResponseRedirect
 
+
 class QuestionCreate(LoginRequiredMixin, CreateView):
     model = Question
     fields = ['question_text']
-    
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user

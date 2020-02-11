@@ -5,9 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from knowledge.models.comment import Comment, Answer
 from django.http import HttpResponseRedirect
 
+
 class CommentUpdate(LoginRequiredMixin, UpdateView):
-    model=Comment
-    fields=['comment_text']
+    model = Comment
+    fields = ['comment_text']
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -17,9 +18,10 @@ class CommentUpdate(LoginRequiredMixin, UpdateView):
         self.object.user = self.request.user
         self.object.updated = timezone.now()
         self.object.save()
-        self.get_success_url = reverse_lazy('answer-detail', args=[str(question_id), str(answer_id)])
+        self.get_success_url = reverse_lazy(
+            'answer-detail', args=[str(question_id), str(answer_id)])
         return HttpResponseRedirect(self.get_success_url)
-        
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         answer_id = self.kwargs['answer']
