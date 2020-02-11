@@ -1,20 +1,20 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Name: {{ user.firstname }}</h1>
+  <h1>Name: {{ question_poster.firstname }}</h1>
 
-  <p><strong>Username:</strong> {{ user.username }}</p>
-  <p><strong>First Name:</strong> {{ user.firstname }}</p>
-  <p><strong>Last Name:</strong> {{ user.lastname }}</p>
-  <p><strong>Bio:</strong> {{ user.bio }}</p>
+  <p><strong>Username:</strong> {{ question_poster.username }}</p>
+  <p><strong>First Name:</strong> {{ question_poster.firstname }}</p>
+  <p><strong>Last Name:</strong> {{ question_poster.lastname }}</p>
+  <p><strong>Bio:</strong> {{ question_poster.bio }}</p>
   
   <div style="margin-left:20px;margin-top:20px">
-    {% if question.user.pk == user.id %}
-
+    {% if question_poster.pk == user.id %}
+  
     <a href="{% url 'user_update' user.pk %}"> Edit bio</a>
   {% endif %}
 
-    {% for ques in user.question_set.all %}
+    {% for ques in question_poster.question_set.all %}
       <hr>
         <p><a href="{{ques.get_absolute_url}}">{{ques.question_text}}</a></p>
       

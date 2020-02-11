@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 # from .forms import CreateQuestion
 # Create your views here.
 
-from .models import Question, Answer, Comment
+from models import Question, Answer, Comment
 from users.models import User
 
 def index(request):
@@ -143,7 +143,7 @@ class CommentCreate(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         answer_id = self.kwargs['answer']
         answer = Answer.objects.get(pk=answer_id)
-        context['answer'] = answer.answer_text[:50]
+        context['answer'] = str(answer)
         return context
         
 class CommentUpdate(LoginRequiredMixin, UpdateView):
@@ -179,22 +179,7 @@ def question_vote(request, pk):
 
     if request.method == 'POST':
         user = request.user
-        if "upvote" in request.POST:
-            question.upvotes+=1
-            question.upvote_users.add(user)
-            question.save()
-        elif "downvote" in request.POST:
-            question.downvotes+=1
-            question.downvote_users.add(user)
-            question.save()
-        elif "remove_upvote" in request.POST:
-            question.upvotes-=1
-            question.upvote_users.remove(user)
-            question.save()
-        elif "remove_downvote" in request.POST:
-            question.downvotes-=1
-            question.downvote_users.remove(user)
-            question.save()
+        vote(question, request.POST, user)
 
         
     return redirect('question-detail', pk)
@@ -204,22 +189,7 @@ def answer_vote(request, question, pk):
 
     if request.method == 'POST':
         user = request.user
-        if "upvote" in request.POST:
-            answer.upvotes+=1
-            answer.upvote_users.add(user)
-            answer.save()
-        elif "downvote" in request.POST:
-            answer.downvotes+=1
-            answer.downvote_users.add(user)
-            answer.save()
-        elif "remove_upvote" in request.POST:
-            answer.upvotes-=1
-            answer.upvote_users.remove(user)
-            answer.save()
-        elif "remove_downvote" in request.POST:
-            answer.downvotes-=1
-            answer.downvote_users.remove(user)
-            answer.save()
+        vote(answer, request.POST, user)
 
         
     return redirect('answer-detail', question , pk)
@@ -229,22 +199,26 @@ def comment_vote(request, question, answer, pk):
 
     if request.method == 'POST':
         user = request.user
-        if "upvote" in request.POST:
-            comment.upvotes+=1
-            comment.upvote_users.add(user)
-            comment.save()
-        elif "downvote" in request.POST:
-            comment.downvotes+=1
-            comment.downvote_users.add(user)
-            comment.save()
-        elif "remove_upvote" in request.POST:
-            comment.upvotes-=1
-            comment.upvote_users.remove(user)
-            comment.save()
-        elif "remove_downvote" in request.POST:
-            comment.downvotes-=1
-            comment.downvote_users.remove(user)
-            comment.save()
+        vote(comment, request.POST, user)
 
         
     return redirect('answer-detail', question , answer)
+
+def vote(model_obj, req_post, user):
+    if "upvote" in req_post:
+            model_obj.upvotes+=1
+            model_obj.upvote_users.add(user)
+            model_obj.save()
+    elif "downvote" in req_post:
+            model_obj.downvotes+=1
+            model_obj.downvote_users.add(user)
+            model_obj.save()
+    elif "remove_upvote" in req_post:
+            model_obj.upvotes-=1
+            model_obj.upvote_users.remove(user)
+            model_obj.save()
+    elif "remove_downvote" in req_post:
+            model_obj.downvotes-=1
+            model_obj.downvote_users.remove(user)
+            model_obj.save()
+

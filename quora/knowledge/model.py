@@ -35,10 +35,10 @@ class Answer(models.Model):
     downvote_users = models.ManyToManyField(User, related_name='Users_who_downvoted_this_answer')
 
     def __str__(self):
-        return f'Answer by {self.user.username} to {self.question.question_text[:20]} ...'
+        return f'{self.user.username}\'s answer to {self.question.question_text[:20]} ...'
 
     class Meta: 
-        ordering = ['-pub_date', 'answer_text']
+        ordering = ['-pub_date', 'upvotes']
 
     def get_absolute_url(self):
         return reverse('answer-detail', args=[str(self.id)]) 
