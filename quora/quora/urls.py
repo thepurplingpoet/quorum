@@ -28,7 +28,11 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('knowledge/', include('knowledge.urls')),
+    path('knowledge/', include('knowledge.urls.index')),
+    path('knowledge/', include('knowledge.urls.user')),
+    path('knowledge/', include('knowledge.urls.question')),
+    path('knowledge/', include('knowledge.urls.answer')),
+    path('knowledge/', include('knowledge.urls.comment')),
 ]
 
 urlpatterns += [
