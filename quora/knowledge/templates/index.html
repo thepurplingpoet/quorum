@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Djanquora Home</h1>
+<p>Welcome to Djanquora, a question-answer website developed in <em>Django</em>!</p>
+{% if user.is_authenticated %}
+<p>Hi {{ user.username }}
+  <p><a href="{% url 'logout' %}">Log out</a></p>
+  {% else %}
+  <p><a href="{% url 'signup' %}">Sign Up</a></p>
+  <p><a href="{% url 'login' %}">Log In </a></p>
+  {% endif %}
+  <ul>{% for ques in questions%}
+    <li><strong><a href="{{ques.get_absolute_url}}">{{ques}}</a></strong></li>
+    {% endfor %}
+  </ul>
+  {% endblock %}

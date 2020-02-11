@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Questions</h1>
+<a href="{% url 'question_create' %}">Add Question</a>
+{% if question_list %}
+<ul>
+  {% for question in question_list %}
+  <li>
+    <a href="{{ question.get_absolute_url }}">{{ question.question_text }}</a> ({{question.pub_date}})
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no questions yet.</p>
+{% endif %}
+{% endblock %}

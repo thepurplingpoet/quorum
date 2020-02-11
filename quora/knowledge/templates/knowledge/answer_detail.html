@@ -1,0 +1,100 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Answer to: <a href="{% url 'question-detail' answer.question.pk %}">{{ answer.question.question_text }}</a></h1>
+
+<p><strong>Author:</strong> <a href="{% url 'user-detail' answer.user.pk %}">{{ answer.user.username }}</a></p>
+<p><strong>Date added:</strong> {{ answer.pub_date }}
+  {% if answer.updated %}
+  <strong>, updated on :</strong> {{ answer.updated }}
+
+  {% endif %}
+</p>
+<strong> Answer </strong>
+<p> {{ answer.answer_text }}</p>
+
+{% if answer.user.pk == user.id %}
+<p><a href="{% url 'answer_update' answer.question.pk answer.pk %}">Update Answer</a>
+  <a href="{% url 'answer_delete' answer.question.pk answer.pk %}">Delete Answer</a>
+</p>
+{% endif %}
+{% if user.is_authenticated %}
+<p><a href="{% url 'comment_create' answer.question.pk answer.pk %}">Add Comment</a></p>
+
+{% endif %}
+Upvotes: {{ answer.upvotes }}
+Downvotes: {{ answer.downvotes }}
+<div style="margin-left:20px;margin-top:20px">
+  {% if user.is_authenticated and answer.user.pk != user.id %}
+
+
+  <p><span class="form-group row">
+      <form method="post" action="{% url 'answer_vote' answer.question.id answer.id %}">
+        {% csrf_token %}
+
+        <input type="submit" class="btn" {% if user in answer.upvote_users.all%} name="remove_upvote"
+          value="Remove Upvote" {% else %} name="upvote" value="Upvote" {% endif %}
+          {% if user in answer.downvote_users.all %} disabled {% endif %}>
+      </form>
+
+
+      <form method="post" action="{% url 'answer_vote' answer.question.id answer.id %}">
+        {% csrf_token %}
+
+        <input type="submit" class="btn" {% if user in answer.downvote_users.all%} name="remove_downvote"
+          value="Remove Downvote" {% else %} name="downvote" value="Downvote" {% endif %}
+          {% if user in answer.upvote_users.all %} disabled {% endif %}>
+      </form>
+    </span>
+  </p>
+
+  {% endif %}
+
+  <hr>
+
+
+
+
+  <hr>
+  {% if not answer.comment_set.all%} No comments yet for this answer!!
+  {% else %}
+  <p><strong>Comments!!</strong></p>
+  {% endif %}
+  {% for cmt in answer.comment_set.all %}
+  <p>{{cmt.user.username}} :
+    {{ cmt.comment_text}}</p>
+  {% if cmt.user.pk == user.id %}
+  <p><a href="{% url 'comment_update' answer.question.pk answer.pk cmt.pk %}">Update Comment</a>
+    <a href="{% url 'comment_delete' answer.question.pk answer.pk cmt.pk %}">Delete Comment</a>
+  </p>
+  {% endif %}
+  {% if user.is_authenticated and cmt.user.pk != user.id %}
+
+  Upvotes: {{ cmt.upvotes }}
+  Downvotes: {{ cmt.downvotes }}
+  <p>
+    <form method="post" action="{% url 'comment_vote' answer.question.id answer.id cmt.id %}">
+      {% csrf_token %}
+
+      <input type="submit" class="btn" {% if user in cmt.upvote_users.all%} name="remove_upvote" value="Remove Upvote"
+        {% else %} name="upvote" value="Upvote" {% endif %} {% if user in cmt.downvote_users.all %} disabled
+        {% endif %}>
+    </form>
+
+
+    <form method="post" action="{% url 'comment_vote' answer.question.id answer.id cmt.id %}">
+      {% csrf_token %}
+
+      <input type="submit" class="btn" {% if user in cmt.downvote_users.all%} name="remove_downvote"
+        value="Remove Downvote" {% else %} name="downvote" value="Downvote" {% endif %}
+        {% if user in cmt.upvote_users.all %} disabled {% endif %}>
+    </form>
+  </p>
+  {% endif %}
+
+  <hr>
+  {% endfor %}
+  </p>
+
+</div>
+{% endblock %}
