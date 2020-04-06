@@ -7,5 +7,7 @@ To use the application:
 - cd quora
 - python3 manage.py runserver
 
+## TODO:
+- sign-up not implemented yet.
 
 
